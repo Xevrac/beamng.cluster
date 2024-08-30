@@ -2,7 +2,7 @@
   "name": "beamng.cluster",
   "version": "1.0.0",
   "description": "![Logo](https://github.com/user-attachments/assets/8c1534b8-6ad6-4c84-b855-2d16bf6b774a)",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
