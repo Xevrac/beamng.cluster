@@ -81,3 +81,91 @@ body, html {
     font-size: 12px;
     text-align: center;
 }
+
+.dashboard {
+    display: flex;
+    flex-wrap: wrap; /* Allows items to wrap onto the next line */
+    gap: 20px; /* Space between cards */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    color: #2c3e50;
+    flex: 1 1 calc(25% - 20px); /* Flex basis with a little space for the gap */
+    box-sizing: border-box; /* Include padding in the width calculation */
+}
+
+.card h2 {
+    margin-bottom: 15px;
+    font-size: 1.5em;
+    color: #2c3e50;
+}
+
+.card p, .card ul {
+    margin: 10px 0;
+    font-size: 1em;
+    line-height: 1.5;
+}
+
+.card ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.card ul li {
+    padding: 5px 0;
+    border-bottom: 1px solid #ecf0f1;
+}
+
+.server-table-container {
+    width: calc(100% - 40px); /* Adjust for padding */
+    margin: 20px; /* Space around the table */
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+table {
+    width: 100%; /* Full width */
+    border-collapse: collapse;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+table th {
+    background-color: #f2f2f2;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.server-header {
+    margin-bottom: 1em;
+}
+
+.flag-icon {
+    width: 20px;
+    height: auto;
+    margin-right: 8px;
+    vertical-align: middle;
+}
+
+.copyright {
+    margin-top: 4px;
+}
