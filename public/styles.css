@@ -133,7 +133,7 @@ body, html {
 }
 
 table {
-    width: 100%; /* Full width */
+    width: 100%;
     border-collapse: collapse;
 }
 
@@ -166,6 +166,270 @@ table tr:hover {
     vertical-align: middle;
 }
 
+.server-statistics {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.server-actions {
+    margin-top: 10px;
+}
+
+.server-actions .btn {
+    margin-right: 10px;
+    padding: 10px 20px;
+    background-color: #bdc3c7;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-stop {
+    color: #f53d2c !important;
+}
+
+.btn-start {
+    color: #27ae60 !important;
+}
+
+.btn-restart {
+    color: #f1c40f !important;
+}
+
+.server-actions .btn:hover {
+    background-color: #95a5a6;
+}
+
+.sidebar-separator {
+    border: none;
+    border-top: 1px solid;
+    border-top-color: rgb(147, 147, 147) !important;
+    margin: 15px 0;
+    width: 100%;
+}
+
 .copyright {
     margin-top: 4px;
+}
+
+#splash-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #2c3e50;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    opacity: 1;
+    transition: opacity 0.1s ease-out;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid rgba(44, 42, 42, 0.15);
+    border-top-color: #0098ff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    transition: transform 0.250s ease-in, opacity 0.250s ease-in;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.spinner-jump {
+    transform: translateY(-50px);
+    opacity: 0;
+}
+
+#app-content {
+    display: none;
+}
+
+
+
+.mb-1 {
+    margin-bottom: 1em;
+}
+
+.settings-container {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.settings-form {
+    margin-bottom: 60px;
+    position: relative;
+    padding-bottom: 60px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-label {
+    flex: 1;
+    font-weight: bold;
+}
+
+.form-input {
+    flex: 2;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+.switch {
+    display: flex;
+    align-items: center;
+}
+
+.switch-input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.switch-label {
+    position: relative;
+    display: inline-block;
+    width: 34px;
+    height: 20px;
+    background-color: #ccc;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+
+.switch-label:before {
+    content: "";
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #fff;
+    transition: transform 0.3s;
+    transform: translateX(2px);
+    top: 2px;
+}
+
+.switch-input:checked + .switch-label {
+    background-color: #0098ff;
+}
+
+.switch-input:checked + .switch-label:before {
+    transform: translateX(14px);
+}
+
+.button-container {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.btn-save {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-save:hover {
+    background-color: #2980b9;
+}
+
+.servers-container {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
+}
+
+.auth-key {
+    display: flex;
+    align-items: center;
+    position: relative; /* Ensures tooltip positioning is relative to this element */
+}
+
+.auth-key .fa-clipboard,
+.auth-key .fa-check-circle {
+    cursor: pointer;
+}
+
+.auth-key-text {
+    margin-left: 5px;
+    text-decoration: none;
+    color: #0098ff; /* Ensure this color is what you want for the text */
+}
+
+.auth-key-text::after {
+    content: attr(title); /* Use the title attribute for the tooltip text */
+    position: absolute;
+    left: 50%;
+    top: 100%;
+    transform: translateX(-50%);
+    background-color: #333; /* Dark background for visibility */
+    color: #fff; /* White text for contrast */
+    padding: 5px;
+    border-radius: 4px;
+    white-space: nowrap;
+    font-size: 14px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s;
+    z-index: 10;
+}
+
+.auth-key-text:hover::after {
+    visibility: visible;
+    opacity: 1;
+}
+
+
+.btn-refresh {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-refresh:hover {
+    background-color: #2980b9;
 }
