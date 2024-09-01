@@ -81,7 +81,6 @@ app.get('/api/servers', async (req, res) => {
                     const serverConfig = await fs.promises.readFile(serverConfigPath, 'utf8');
                     const configData = toml.parse(serverConfig);
 
-                    // Extract the center part of the map path
                     const mapPath = configData.General.Map || 'Unknown';
                     const mapNameMatch = mapPath.match(/^\/levels\/([^\/]+)\//);
                     const mapName = mapNameMatch ? mapNameMatch[1] : 'Unknown';
@@ -95,7 +94,7 @@ app.get('/api/servers', async (req, res) => {
                     };
                 } catch (err) {
                     console.error(`Error reading server config for ${dirent.name}:`, err);
-                    return null; // Skip servers with errors
+                    return null; 
                 }
             }));
 
