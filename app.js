@@ -66,64 +66,47 @@ app.get('/settings', async (req, res) => {
     }
 });
 
-function fetchServers() {
-    fetch('/api/servers')
-        .then(response => response.json())
-        .then(data => {
-            tableBody.innerHTML = ''; // Clear existing data
+app.get('/api/servers', async (req, res) => {
+    try {
+        const config = await readConfig();
+        const serverPath = path.join(__dirname, config.serverPath);
 
-            if (data.length === 0) {
-                tableBody.innerHTML = '<tr><td colspan="5">No servers added yet.</td></tr>';
-                noServersMessage.style.display = 'block';
-            } else {
-                noServersMessage.style.display = 'none';
-                data.forEach(server => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${server.name}</td>
-                        <td>${server.port}</td>
-                        <td>
-                            <span class="auth-key">
-                                <i class="fas fa-clipboard" data-clipboard-text="${server.authKey}" aria-hidden="true"></i>
-                                <span class="auth-key-text" title="${server.authKey}">Spoiler</span>
-                            </span>
-                        </td>
-                        <td>${server.maxPlayers}</td>
-                        <td>${server.map}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
+        const servers = await fs.promises.readdir(serverPath, { withFileTypes: true });
 
-                // Initialize clipboard functionality
-                document.querySelectorAll('.auth-key .fa-clipboard').forEach(icon => {
-                    icon.addEventListener('click', function() {
-                        const text = this.getAttribute('data-clipboard-text');
-                        navigator.clipboard.writeText(text)
-                            .then(() => {
-                                // Change the icon to indicate success
-                                this.classList.remove('fa-clipboard');
-                                this.classList.add('fa-check-circle');
-                                this.style.color = 'green'; // Change color to indicate success
+        const serverData = await Promise.all(servers
+            .filter(dirent => dirent.isDirectory())
+            .map(async (dirent) => {
+                const serverConfigPath = path.join(serverPath, dirent.name, 'ServerConfig.toml');
+                try {
+                    const serverConfig = await fs.promises.readFile(serverConfigPath, 'utf8');
+                    const configData = toml.parse(serverConfig);
 
-                                // Optionally, revert back to clipboard icon after a short time
-                                setTimeout(() => {
-                                    this.classList.remove('fa-check-circle');
-                                    this.classList.add('fa-clipboard');
-                                    this.style.color = ''; // Reset color
-                                }, 2000); // Revert after 2 seconds
-                            })
-                            .catch(err => {
-                                console.error('Failed to copy text: ', err);
-                            });
-                    });
-                });
-            }
-        })
-        .catch(err => {
-            console.error('Error fetching servers:', err);
-            tableBody.innerHTML = '<tr><td colspan="5">Error fetching server data.</td></tr>';
-        });
-}
+                    // Extract the center part of the map path
+                    const mapPath = configData.General.Map || 'Unknown';
+                    const mapNameMatch = mapPath.match(/^\/levels\/([^\/]+)\//);
+                    const mapName = mapNameMatch ? mapNameMatch[1] : 'Unknown';
+
+                    return {
+                        name: configData.General.Name || 'Unknown',
+                        port: configData.General.Port || 'Unknown',
+                        authKey: configData.General.AuthKey || 'Unknown', // sensitive data
+                        maxPlayers: configData.General.MaxPlayers || 'Unknown',
+                        map: mapName
+                    };
+                } catch (err) {
+                    console.error(`Error reading server config for ${dirent.name}:`, err);
+                    return null; // Skip servers with errors
+                }
+            }));
+
+        const filteredServers = serverData.filter(server => server !== null);
+
+        res.json(filteredServers);
+    } catch (err) {
+        console.error('Error fetching servers:', err);
+        res.status(500).json({ error: 'Error fetching servers' });
+    }
+});
 
 app.post('/update-settings', async (req, res) => {
     try {
