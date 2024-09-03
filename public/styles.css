@@ -168,7 +168,7 @@ table tr:hover {
 
 .server-statistics {
     width: calc(100% - 40px);
-    margin: 20px;
+    margin: 20px 20px 40px;
     padding: 20px;
     background-color: #ffffff;
     border-radius: 8px;
@@ -262,21 +262,8 @@ table tr:hover {
     display: none;
 }
 
-
-
 .mb-1 {
     margin-bottom: 1em;
-}
-
-.settings-container {
-    width: calc(100% - 40px);
-    margin: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    position: relative;
 }
 
 .settings-form {
@@ -368,17 +355,6 @@ table tr:hover {
     background-color: #2980b9;
 }
 
-.servers-container {
-    width: calc(100% - 40px);
-    margin: 20px;
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    position: relative;
-}
-
 .auth-key {
     display: flex;
     align-items: center;
@@ -432,4 +408,15 @@ table tr:hover {
 
 .btn-refresh:hover {
     background-color: #2980b9;
+}
+
+.content-container {
+    width: calc(100% - 40px);
+    margin: 20px;
+    padding: 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+    position: relative;
 }

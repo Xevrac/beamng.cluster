@@ -70,6 +70,24 @@ app.get('/settings', async (req, res) => {
     }
 });
 
+app.get('/about', async (req, res) => {
+    try {
+        const versionData = await fs.promises.readFile(path.join(__dirname, 'public/version.json'), 'utf8');
+        const version = JSON.parse(versionData).version;
+        const currentYear = new Date().getFullYear();
+
+        res.render('layout', {
+            title: 'BeamNG.cluster | About',
+            version: version,
+            body: 'about',
+            year: currentYear
+        });
+    } catch (err) {
+        console.error('Error fetching settings:', err);
+        res.status(500).send('Internal Server Error');
+    }
+});
+
 app.get('/api/servers', async (req, res) => {
     try {
         const config = await readConfig();
