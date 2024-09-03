@@ -18,7 +18,7 @@ app.get('/', async (req, res) => {
         const config = await readConfig();
 
         res.render('layout', {
-            title: 'Home',
+            title: 'BeamNG.cluster | Home',
             version: version,
             body: 'index',
             year: currentYear
@@ -38,7 +38,7 @@ app.get('/servers', async (req, res) => {
         const config = await readConfig();
 
         res.render('layout', {
-            title: 'Servers',
+            title: 'BeamNG.cluster | Servers',
             version: version,
             body: 'servers',
             year: currentYear
@@ -58,7 +58,7 @@ app.get('/settings', async (req, res) => {
         const config = await readConfig();
 
         res.render('layout', {
-            title: 'Settings',
+            title: 'BeamNG.cluster | Settings',
             version: version,
             body: 'settings',
             serverPath: config.serverPath || '',
