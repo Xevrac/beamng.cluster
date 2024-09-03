@@ -13,6 +13,7 @@ app.get('/', async (req, res) => {
     try {
         const versionData = await fs.promises.readFile(path.join(__dirname, 'public/version.json'), 'utf8');
         const version = JSON.parse(versionData).version;
+        const currentYear = new Date().getFullYear();
 
         const config = await readConfig();
 
@@ -20,6 +21,7 @@ app.get('/', async (req, res) => {
             title: 'Home',
             version: version,
             body: 'index',
+            year: currentYear
         });
     } catch (err) {
         console.error('Error fetching data:', err);
@@ -31,6 +33,7 @@ app.get('/servers', async (req, res) => {
     try {
         const versionData = await fs.promises.readFile(path.join(__dirname, 'public/version.json'), 'utf8');
         const version = JSON.parse(versionData).version;
+        const currentYear = new Date().getFullYear();
 
         const config = await readConfig();
 
@@ -38,6 +41,7 @@ app.get('/servers', async (req, res) => {
             title: 'Servers',
             version: version,
             body: 'servers',
+            year: currentYear
         });
     } catch (err) {
         console.error('Error fetching data:', err);
@@ -49,6 +53,7 @@ app.get('/settings', async (req, res) => {
     try {
         const versionData = await fs.promises.readFile(path.join(__dirname, 'public/version.json'), 'utf8');
         const version = JSON.parse(versionData).version;
+        const currentYear = new Date().getFullYear();
 
         const config = await readConfig();
 
@@ -57,6 +62,7 @@ app.get('/settings', async (req, res) => {
             version: version,
             body: 'settings',
             serverPath: config.serverPath || '',
+            year: currentYear
         });
     } catch (err) {
         console.error('Error fetching settings:', err);
