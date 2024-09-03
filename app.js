@@ -1,10 +1,8 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const multer = require('multer');
 const toml = require('toml');
 const app = express();
-const upload = multer({ dest: 'uploads/' });
 
 app.set('view engine', 'ejs');
 
