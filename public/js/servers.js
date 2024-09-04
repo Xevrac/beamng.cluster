@@ -34,32 +34,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         `;
                         tableBody.appendChild(row);
                     });
-
-                    // Add event listeners for clipboard copy
-                    document.querySelectorAll('.auth-key').forEach(element => {
-                        const authKey = element.querySelector('.auth-key-text').getAttribute('title');
-                        const icon = element.querySelector('.fa-clipboard');
-
-                        const copyToClipboard = () => {
-                            navigator.clipboard.writeText(authKey).then(() => {
-                                // Change icon to indicate success
-                                icon.classList.replace('fa-clipboard', 'fa-check-circle');
-                                icon.style.color = 'green';
-
-                                setTimeout(() => {
-                                    // Reset icon after a short delay
-                                    icon.classList.replace('fa-check-circle', 'fa-clipboard');
-                                    icon.style.color = '';
-                                }, 2000);
-                            }).catch(err => {
-                                console.error('Failed to copy text: ', err);
-                            });
-                        };
-
-                        // Add event listener to both the icon and the text
-                        element.addEventListener('click', copyToClipboard);
-                        element.querySelector('.auth-key-text').addEventListener('click', copyToClipboard);
-                    });
                 }
             })
             .catch(err => {
@@ -69,15 +43,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function stripMapPath(mapPath) {
-        // Extract just the central part of the map path
         const match = mapPath.match(/\/levels\/([^\/]+)\//);
         return match ? match[1] : 'Unknown Map';
     }
+
+    function copyToClipboard(authKey, icon) {
+        navigator.clipboard.writeText(authKey).then(() => {
+            icon.classList.replace('fa-clipboard', 'fa-check-circle');
+            icon.style.color = 'green';
+
+            setTimeout(() => {
+                icon.classList.replace('fa-check-circle', 'fa-clipboard');
+                icon.style.color = '';
+            }, 2000);
+        }).catch(err => {
+            console.error('Failed to copy text: ', err);
+        });
+    }
+
+    tableBody.addEventListener('click', (event) => {
+        const authKeyElement = event.target.closest('.auth-key');
+        if (authKeyElement) {
+            const authKey = authKeyElement.querySelector('.auth-key-text').getAttribute('title');
+            const icon = authKeyElement.querySelector('.fa-clipboard');
+            copyToClipboard(authKey, icon);
+        }
+    });
 
     if (refreshButton) {
         refreshButton.addEventListener('click', fetchServers);
     }
 
-    // Initial fetch
     fetchServers();
 });
