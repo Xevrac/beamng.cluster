@@ -6,7 +6,8 @@ function getConfig() {
     if (fs.existsSync(configPath)) {
         return JSON.parse(fs.readFileSync(configPath, 'utf8'));
     } else {
-        throw new Error('Config file not found');
+        console.error('Config file not found, using default configuration.');
+        return {}; // Return empty object or default values here if config.json missing
     }
 }
 
