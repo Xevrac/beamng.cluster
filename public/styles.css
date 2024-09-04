@@ -370,6 +370,7 @@ table tr:hover {
     margin-left: 5px;
     text-decoration: none;
     color: #0098ff; /* Ensure this color is what you want for the text */
+    cursor: pointer;
 }
 
 .auth-key-text::after {
