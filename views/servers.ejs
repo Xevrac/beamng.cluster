@@ -11,8 +11,16 @@
     <%- include('sidebar', { version: version }) %>
     <div class="content-container">
         <div class="server-page">
-            <div class="server-controls mb-1">
-                <button id="refresh-servers" class="btn-refresh">Refresh</button>
+            <div class="servers-button-container">
+                <div class="server-controls mb-1">
+                    <button id="refresh-servers" class="btn-server"><i class="fa-solid fa-arrows-rotate"></i></button>
+                </div>
+                <div class="server-controls mb-1">
+                    <button id="edit-servers" class="btn-server"><i class="fa-solid fa-pen-to-square"></i></button>
+                </div>
+                <div class="server-controls mb-1">
+                    <button id="save-servers" class="btn-server" style="display: none;">Save</button>
+                </div>
             </div>
             <table id="server-table">
                 <thead>
@@ -27,7 +35,7 @@
                 </thead>
                 <tbody>
                 <tr id="no-servers-message">
-                    <td colspan="4">No servers found</td>
+                    <td colspan="6">No servers found</td>
                 </tr>
                 </tbody>
             </table>

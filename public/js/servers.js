@@ -4,8 +4,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const isHomePage = window.location.pathname === '/';
 
     const refreshButton = document.getElementById('refresh-servers');
+    const editButton = document.getElementById('edit-servers');
+    const saveButton = document.getElementById('save-servers');
     const tableBody = document.querySelector('#server-table tbody');
     const noServersMessage = document.getElementById('no-servers-message');
+    let isEditMode = false;
 
     const validCountries = [
         'AD', 'AE', 'AF', 'AG', 'AI', 'AL', 'AM', 'AO', 'AR', 'AS', 'AT', 'AU', 'AW', 'AX', 'AZ',
@@ -26,6 +29,82 @@ document.addEventListener('DOMContentLoaded', () => {
         'UG', 'UM', 'US', 'UY', 'UZ', 'VA', 'VC', 'VE', 'VG', 'VI', 'VN', 'VU', 'WF', 'WS', 'YE',
         'YT', 'ZA', 'ZM', 'ZW'
     ];
+
+    function createInputCell(value, type = 'text') {
+        return `<td><input type="${type}" value="${value}" /></td>`;
+    }
+
+    function toggleEditMode() {
+        isEditMode = !isEditMode;
+        const rows = tableBody.querySelectorAll('tr');
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (isEditMode) {
+                // Convert cells to input fields
+                cells.forEach(cell => {
+                    const text = cell.innerText || cell.textContent;
+                    cell.innerHTML = createInputCell(text);
+                });
+            } else {
+                // Convert input fields back to text
+                cells.forEach(cell => {
+                    const input = cell.querySelector('input');
+                    if (input) {
+                        cell.innerHTML = input.value;
+                    }
+                });
+            }
+        });
+
+        saveButton.style.display = isEditMode ? 'inline-block' : 'none';
+    }
+
+    function saveServers() {
+        const rows = tableBody.querySelectorAll('tr');
+        const serverData = [];
+
+        rows.forEach(row => {
+            const cells = row.querySelectorAll('td');
+            if (cells.length > 0 && !cells[0].querySelector('input')) {
+                // Skip rows that are not editable
+                return;
+            }
+
+            const server = {
+                name: cells[1].querySelector('input')?.value || cells[1].innerText,
+                port: cells[2].querySelector('input')?.value || cells[2].innerText,
+                authKey: cells[3].querySelector('input')?.value || cells[3].innerText,
+                maxPlayers: cells[4].querySelector('input')?.value || cells[4].innerText,
+                map: cells[5].querySelector('input')?.value || cells[5].innerText,
+                country: cells[0].querySelector('input')?.value || cells[0].innerText
+            };
+
+            serverData.push(server);
+        });
+
+        console.log('Sending serverData:', serverData);
+
+        fetch('/api/save-servers', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(serverData)
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    alert('Servers updated successfully.');
+                } else {
+                    alert('Error updating servers.');
+                }
+            })
+            .catch(err => {
+                console.error('Error saving servers:', err);
+                alert('Error saving servers.');
+            });
+    }
 
     function stripImBBColors(text) {
         return text.replace(/\^[a-zA-Z0-9]/g, '').trim();
@@ -71,7 +150,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 noServersMessage.style.display = 'none';
                             }
                             data.forEach(server => {
-                                let authKeyCell = ''; // Default to empty if on the homepage
+                                let authKeyCell = '';
 
                                 if (!isHomePage) {
                                     authKeyCell = `
@@ -104,15 +183,25 @@ document.addEventListener('DOMContentLoaded', () => {
                     })
                     .catch(err => {
                         console.error('Error fetching servers:', err);
-                        tableBody.innerHTML = '<tr><td colspan="6">Error fetching server data.</td></tr>';
+                        tableBody.innerHTML = '<tr><td colspan="6">Error loading servers.</td></tr>';
                     })
                     .finally(() => {
-                        setTimeout(() => {
-                            fadeInRows(tableBody, 400);
-                        }, 400);
+                        fadeInRows(tableBody, 400);
                     });
             }, 400);
         }
+    }
+
+    if (refreshButton) {
+        refreshButton.addEventListener('click', fetchServers);
+    }
+
+    if (editButton) {
+        editButton.addEventListener('click', toggleEditMode);
+    }
+
+    if (saveButton) {
+        saveButton.addEventListener('click', saveServers);
     }
 
     function stripMapPath(mapPath) {

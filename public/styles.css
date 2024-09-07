@@ -402,7 +402,7 @@ table tr:hover {
 }
 
 
-.btn-refresh {
+.btn-server {
     padding: 10px 20px;
     background-color: #3498db;
     color: #fff;
@@ -425,4 +425,13 @@ table tr:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     box-sizing: border-box;
     position: relative;
+}
+
+.servers-button-container {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-mode input {
+    width: 100%;
 }

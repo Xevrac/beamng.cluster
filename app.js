@@ -8,6 +8,7 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.get('/', async (req, res) => {
     try {
@@ -98,7 +99,8 @@ app.get('/api/servers', async (req, res) => {
         const serverData = await Promise.all(servers
             .filter(dirent => dirent.isDirectory())
             .map(async (dirent) => {
-                const serverConfigPath = path.join(serverPath, dirent.name, 'ServerConfig.toml');
+                const serverDir = path.join(serverPath, dirent.name);
+                const serverConfigPath = path.join(serverDir, 'ServerConfig.toml');
                 try {
                     const serverConfig = await fs.promises.readFile(serverConfigPath, 'utf8');
                     const configData = toml.parse(serverConfig);
@@ -114,11 +116,12 @@ app.get('/api/servers', async (req, res) => {
                         authKey: configData.General.AuthKey || 'Unknown', // sensitive data
                         maxPlayers: configData.General.MaxPlayers || 'Unknown',
                         map: mapName,
-                        country: country
+                        country: country,
+                        path: serverDir
                     };
                 } catch (err) {
                     console.error(`Error reading server config for ${dirent.name}:`, err);
-                    return null; 
+                    return null;
                 }
             }));
 
@@ -130,6 +133,49 @@ app.get('/api/servers', async (req, res) => {
         res.status(500).json({ error: 'Error fetching servers' });
     }
 });
+
+// Work in progress - Currently not passing path properly on post
+app.post('/api/save-servers', async (req, res) => {
+    try {
+        const serverData = req.body;
+
+        console.log('serverData:', serverData);
+
+        if (!Array.isArray(serverData)) {
+            throw new Error('Expected serverData to be an array.');
+        }
+
+        await Promise.all(serverData.map(async (server) => {
+            const serverConfigPath = path.join(server.path, 'ServerConfig.toml');
+            console.log('Saving server config to path:', serverConfigPath);
+
+            try {
+                const existingConfig = await fs.promises.readFile(serverConfigPath, 'utf8');
+                const configData = toml.parse(existingConfig);
+
+                // Update configData with new values
+                configData.General.Name = server.name;
+                configData.General.Port = server.port;
+                configData.General.AuthKey = server.authKey;
+                configData.General.MaxPlayers = server.maxPlayers;
+                configData.General.Map = `/levels/${server.map}`;
+                configData.General.Country = server.country.trim();
+
+                const updatedConfig = toml.stringify(configData);
+                await fs.promises.writeFile(serverConfigPath, updatedConfig, 'utf8');
+            } catch (err) {
+                console.error(`Error updating server config for ${server.name}:`, err);
+                throw new Error(`Failed to update config for ${server.name}`);
+            }
+        }));
+
+        res.json({ success: true });
+    } catch (err) {
+        console.error('Error saving servers:', err);
+        res.status(500).json({ success: false, error: err.message });
+    }
+});
+
 
 app.post('/update-settings', async (req, res) => {
     try {
