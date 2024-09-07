@@ -59,6 +59,6 @@ v. Begin developing ✌️
 │  │    └── ServerConfig.toml
 │  │
 │  └── 📁 server2
-│  │    ├── ...
-│  │    └── ServerConfig.toml
+│       ├── ...
+│       └── ServerConfig.toml
 ```
