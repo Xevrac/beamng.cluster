@@ -30,6 +30,48 @@ document.addEventListener('DOMContentLoaded', () => {
         'YT', 'ZA', 'ZM', 'ZW'
     ];
 
+    function prettyPrintMap(mapId) {
+        const maps = {
+            // Gridmaps
+            gridmap: 'Gridmap',
+            smallgrid: 'Gridmap V2',
+
+            // USA
+            east_coast_usa: 'East Coast USA',
+            west_coast_usa: 'West Coast USA',
+            utah: 'Utah',
+
+            italy: 'Italy',
+
+            // Islands
+            jungle_rock_island: 'Jungle Rock Island',
+            small_island: 'Small Island',
+
+            // Generic
+            industrial: 'Industrial Site',
+            derby: 'Derby Arenas',
+            hirochi_raceway: 'Hirochi Raceway',
+
+            automation_test_track: 'Automation Test Track',
+            driver_training: 'Driver Training',
+        };
+        
+        const prettyMap = maps[mapId];
+        if (prettyMap) {
+            return prettyMap;
+        }
+
+        // return mapId;
+
+        // A better solution than ^^^ is to
+        // split it up by _ and capitalize it,
+        // e.g. "some_nice_map" -> "Some Nice Map"
+        
+        return mapId.split('_').map(word => {
+            return word[0].toUpperCase() + word.slice(1).toLowerCase();
+        }).join(' ');
+    }
+
     function createInputCell(value, type = 'text') {
         return `<td><input type="${type}" value="${value}" /></td>`;
     }
@@ -175,7 +217,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 <td>${server.port}</td>
                                 ${authKeyCell}
                                 <td>${server.maxPlayers}</td>
-                                <td>${server.map}</td>
+                                <td>${prettyPrintMap(server.map)}</td>
                             `;
                                 tableBody.appendChild(row);
                             });
