@@ -31,53 +31,88 @@ document.addEventListener('DOMContentLoaded', () => {
         return text.replace(/\^[a-zA-Z0-9]/g, '').trim();
     }
 
+    function fadeOutRows(tableBody, duration) {
+        const rows = tableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.transition = `opacity ${duration}ms`;
+            row.style.opacity = 0;
+        });
+    }
+
+    function fadeInRows(tableBody, duration) {
+        const rows = tableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+            row.style.transition = `opacity ${duration}ms`;
+            row.style.opacity = 1;
+        });
+    }
+
     function fetchServers() {
-        fetch('/api/servers')
-            .then(response => response.json())
-            .then(data => {
-                tableBody.innerHTML = ''; // Clear existing data
+        const serverTable = document.getElementById('server-table');
+        const tableBody = serverTable ? serverTable.querySelector('tbody') : null;
+        const noServersMessage = document.getElementById('no-servers-message');
 
-                if (data.length === 0) {
-                    tableBody.innerHTML = '<tr><td colspan="5">No servers added yet.</td></tr>';
-                    noServersMessage.style.display = 'block';
-                } else {
-                    noServersMessage.style.display = 'none';
-                    data.forEach(server => {
-                        let authKeyCell = ''; // Default to empty if on the homepage
+        if (tableBody) {
+            fadeOutRows(tableBody, 400);
 
-                        if (!isHomePage) {
-                            authKeyCell = `
-                            <td>
-                                <span class="auth-key">
-                                    <i class="fa fa-clipboard" aria-hidden="true"></i>
-                                    <span class="auth-key-text" title="${server.authKey}">Spoiler</span>
-                                </span>
-                            </td>`;
+            setTimeout(() => {
+                fetch('/api/servers')
+                    .then(response => response.json())
+                    .then(data => {
+                        tableBody.innerHTML = ''; // Clear existing data
+
+                        if (data.length === 0) {
+                            tableBody.innerHTML = '<tr id="no-servers-message"><td colspan="6">No servers added yet.</td></tr>';
+                            if (noServersMessage) {
+                                noServersMessage.style.display = 'block';
+                            }
+                        } else {
+                            if (noServersMessage) {
+                                noServersMessage.style.display = 'none';
+                            }
+                            data.forEach(server => {
+                                let authKeyCell = ''; // Default to empty if on the homepage
+
+                                if (!isHomePage) {
+                                    authKeyCell = `
+                                <td>
+                                    <span class="auth-key">
+                                        <i class="fa fa-clipboard" aria-hidden="true"></i>
+                                        <span class="auth-key-text" title="${server.authKey}">Spoiler</span>
+                                    </span>
+                                </td>`;
+                                }
+
+                                const countryCode = server.country && validCountries.includes(server.country.toUpperCase())
+                                    ? server.country.toLowerCase()
+                                    : 'null';
+
+                                const row = document.createElement('tr');
+                                row.innerHTML = `
+                                <td class="flag-icon">
+                                    <img src="/images/flags/${countryCode}.png" alt="${server.country || 'Null'} flag">
+                                </td>
+                                <td>${stripImBBColors(server.name)}</td>
+                                <td>${server.port}</td>
+                                ${authKeyCell}
+                                <td>${server.maxPlayers}</td>
+                                <td>${server.map}</td>
+                            `;
+                                tableBody.appendChild(row);
+                            });
                         }
-
-                        const countryCode = server.country && validCountries.includes(server.country.toUpperCase())
-                            ? server.country.toLowerCase()
-                            : 'null';
-
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td class="flag-icon">
-                                <img src="/images/flags/${countryCode}.png" alt="${server.country || 'Null'} flag">
-                            </td>
-                            <td>${stripImBBColors(server.name)}</td>
-                            <td>${server.port}</td>
-                            ${authKeyCell}
-                            <td>${server.maxPlayers}</td>
-                            <td>${server.map}</td>
-                        `;
-                        tableBody.appendChild(row);
+                    })
+                    .catch(err => {
+                        console.error('Error fetching servers:', err);
+                        tableBody.innerHTML = '<tr><td colspan="6">Error fetching server data.</td></tr>';
+                    })
+                    .finally(() => {
+                        setTimeout(() => {
+                            fadeInRows(tableBody, 400);
+                        }, 400);
                     });
-                }
-            })
-            .catch(err => {
-                console.error('Error fetching servers:', err);
-                tableBody.innerHTML = '<tr><td colspan="6">Error fetching server data.</td></tr>';
-            });
+            }, 400);
+        }
     }
 
     function stripMapPath(mapPath) {
