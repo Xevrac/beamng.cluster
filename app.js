@@ -2,6 +2,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const toml = require('toml');
+const smolToml = require('smol-toml');
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -161,7 +162,7 @@ app.post('/api/save-servers', async (req, res) => {
                 configData.General.Map = `/levels/${server.map}`;
                 configData.General.Country = server.country.trim();
 
-                const updatedConfig = toml.stringify(configData);
+                const updatedConfig = smolToml.stringify(configData);
                 await fs.promises.writeFile(serverConfigPath, updatedConfig, 'utf8');
             } catch (err) {
                 console.error(`Error updating server config for ${server.name}:`, err);
