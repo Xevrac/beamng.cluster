@@ -40,5 +40,5 @@ iii. Run `npm install`
 
 iv. Run `node app.js`
 
-v. Begin deveoping ✌️
+v. Begin developing ✌️
 
