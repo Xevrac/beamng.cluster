@@ -163,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
 
                                 const countryCode = server.country && validCountries.includes(server.country.toUpperCase())
-                                    ? server.country.toUppercaseCase()
+                                    ? server.country.toUpperCase()
                                     : 'null';
 
                                 const row = document.createElement('tr');
