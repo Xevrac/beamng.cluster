@@ -39,48 +39,22 @@
 
 <div class="server-table-container">
     <h2 class="server-header">Server List</h2>
-    <table>
+    <table id="server-table">
         <thead>
         <tr>
-            <th>Location</th>
+            <th>Country</th>
             <th>Server Name</th>
+            <th>Port</th>
+            <th>Slots</th>
             <th>Map</th>
-            <th>Players</th>
-            <th>Mods Loaded</th>
-            <th>Status</th>
         </tr>
         </thead>
         <tbody>
-        <tr>
-            <td>
-                <img src="/images/flags/748002_flag_australia.png" alt="AUS Flag" class="flag-icon"> Australia
-            </td>
-            <td>Server 1</td>
-            <td>West Coast USA</td>
-            <td>12/24</td>
-            <td>BRZ, Cobalt Radar</td>
-            <td>Offline</td>
-        </tr>
-        <tr>
-            <td>
-                <img src="/images/flags/748024_united_kingdom_flag.png" alt="UK Flag" class="flag-icon"> United Kingdom
-            </td>
-            <td>Server 2</td>
-            <td>Utah</td>
-            <td>8/20</td>
-            <td>Cobalt Essentials, Infection</td>
-            <td>Offline</td>
-        </tr>
-        <tr>
-            <td>
-                <img src="/images/flags/748116_flag_japan.png" alt="Japan Flag" class="flag-icon"> Japan
-            </td>
-            <td>Server 3</td>
-            <td>Italy</td>
-            <td>15/30</td>
-            <td>Hotlaps</td>
-            <td>Online</td>
+        <tr id="no-servers-message">
+            <td colspan="3">No servers found</td>
         </tr>
         </tbody>
     </table>
 </div>
+
+<script src="/js/servers.js"></script>

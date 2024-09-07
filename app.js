@@ -106,13 +106,15 @@ app.get('/api/servers', async (req, res) => {
                     const mapPath = configData.General.Map || 'Unknown';
                     const mapNameMatch = mapPath.match(/^\/levels\/([^\/]+)\//);
                     const mapName = mapNameMatch ? mapNameMatch[1] : 'Unknown';
+                    const country = configData.General.Country || 'Unknown';
 
                     return {
                         name: configData.General.Name || 'Unknown',
                         port: configData.General.Port || 'Unknown',
                         authKey: configData.General.AuthKey || 'Unknown', // sensitive data
                         maxPlayers: configData.General.MaxPlayers || 'Unknown',
-                        map: mapName
+                        map: mapName,
+                        country: country
                     };
                 } catch (err) {
                     console.error(`Error reading server config for ${dirent.name}:`, err);
