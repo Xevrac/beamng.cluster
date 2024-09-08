@@ -1,3 +1,4 @@
 {
-  "serverPath": "/servers/"
+  "serverPath": "/servers/",
+  "environment": "dev"
 }

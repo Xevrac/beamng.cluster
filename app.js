@@ -63,7 +63,8 @@ app.get('/settings', async (req, res) => {
             title: 'BeamNG.cluster | Settings',
             version: version,
             body: 'settings',
-            serverPath: config.serverPath || '',
+            serverPath: config.serverPath || '/servers/',
+            environment: config.environment || 'prod',
             year: currentYear
         });
     } catch (err) {
