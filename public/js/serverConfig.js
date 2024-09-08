@@ -7,7 +7,7 @@ function getConfig() {
         return JSON.parse(fs.readFileSync(configPath, 'utf8'));
     } else {
         console.error('Config file not found, using default configuration.');
-        return {}; // Return empty object or default values here if config.json missing
+        return { serverPath: '/servers/', environment: 'prod' }; // Default values
     }
 }
 

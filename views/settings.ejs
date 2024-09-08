@@ -16,11 +16,14 @@
                 <label for="serverPath" class="form-label">Server Path:</label>
                 <input type="text" id="serverPath" name="serverPath" value="<%= serverPath %>" class="form-input" required>
             </div>
+            <div class="form-group">
+                <label for="environment" class="form-label">Environment:</label>
+                <input type="text" id="environment" name="environment" value="<%= environment %>" class="form-input input-deny" readonly>
+            </div>
             <div class="button-container">
                 <button id="theme-toggle-button" type="submit" class="btn-save">Save</button>
             </div>
         </form>
-
     </div>
 </div>
 </body>

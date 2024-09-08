@@ -435,3 +435,8 @@ table tr:hover {
 .edit-mode input {
     width: 100%;
 }
+
+.input-deny {
+    cursor: not-allowed;
+    color: grey;
+}
