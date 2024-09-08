@@ -43,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isEditMode) {
                 // Convert cells to input fields
                 cells.forEach(cell => {
+                    // Auth Key is non editable (because of spoiler)
+                    if (cell.attributes.isauthkey) {
+                        return;
+                    }
                     const text = cell.innerText || cell.textContent;
                     cell.innerHTML = createInputCell(text);
                 });
@@ -74,10 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const server = {
                 name: cells[1].querySelector('input')?.value || cells[1].innerText,
                 port: cells[2].querySelector('input')?.value || cells[2].innerText,
-                authKey: cells[3].querySelector('input')?.value || cells[3].innerText,
+                // authKey: cells[3].querySelector('input')?.value || cells[3].innerText,
                 maxPlayers: cells[4].querySelector('input')?.value || cells[4].innerText,
                 map: cells[5].querySelector('input')?.value || cells[5].innerText,
-                country: cells[0].querySelector('input')?.value || cells[0].innerText
+                country: cells[0].querySelector('input')?.value || cells[0].innerText,
+                path: row.clusterPath
             };
 
             serverData.push(server);
@@ -154,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 if (!isHomePage) {
                                     authKeyCell = `
-                                <td>
+                                <td isauthkey=true>
                                     <span class="auth-key">
                                         <i class="fa fa-clipboard" aria-hidden="true"></i>
                                         <span class="auth-key-text" title="${server.authKey}">Spoiler</span>
@@ -167,6 +172,7 @@ document.addEventListener('DOMContentLoaded', () => {
                                     : 'null';
 
                                 const row = document.createElement('tr');
+                                row.clusterPath = server.path;
                                 row.innerHTML = `
                                 <td class="flag-icon">
                                     <img src="/images/flags/${countryCode}.png" alt="${server.country || 'Null'} flag">
