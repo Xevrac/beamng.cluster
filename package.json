@@ -12,6 +12,7 @@
   "dependencies": {
     "ejs": "^3.1.10",
     "express": "^4.19.2",
+    "smol-toml": "^1.3.0",
     "toml": "^3.0.0"
   }
 }
