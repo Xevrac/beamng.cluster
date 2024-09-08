@@ -4,13 +4,13 @@
 BeamNG.cluster is a Node.js based server control panel for [BeamMP](https://github.com/beammp) servers. This project aims to take a simple server-manager idea and create a multi-server administration tool using an intuitive Dashboard. 
 
 # Media
-###### Static prototype
+###### Prototype
 
 ![image](https://github.com/user-attachments/assets/a0739b20-b64c-4ab9-887a-9ba168d429b1)
 
 ![image](https://github.com/user-attachments/assets/f1877b6c-b451-45c7-938d-772c09c67aa1)
 
-# TO-DO
+# TODO
 
 * Frontend ✅
 * Backend 🏗️
@@ -49,7 +49,7 @@ v. Begin developing ✌️
 ├── config.json
 │   ├── ℹ️ This houses configuration for beamng.cluster itself.
 │   ├──    This is edited and read by it.
-│   └──    You should not update this manually, unless you need to.
+│   └── ⚠️ You should not update this manually, unless you need to.
 │ 
 ├── 📂 servers
 |  ├── ℹ️ Your BeamMP servers go here.
