@@ -108,8 +108,9 @@ app.get('/api/servers', async (req, res) => {
                     const configData = toml.parse(serverConfig);
 
                     const mapPath = configData.General.Map || 'Unknown';
-                    const mapNameMatch = mapPath.match(/^\/levels\/([^\/]+)\//);
-                    const mapName = mapNameMatch ? mapNameMatch[1] : 'Unknown';
+                    const mapPrefix = '/levels/';
+                    const mapName = mapPath.startsWith(mapPrefix) ? mapPath.slice(mapPrefix.length) :
+                        'Unknown';
                     const country = configData.General.Country || 'Unknown';
 
                     return {
