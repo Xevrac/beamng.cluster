@@ -440,3 +440,9 @@ table tr:hover {
     cursor: not-allowed;
     color: grey;
 }
+
+.country-dropdown {
+    max-height: 150px;
+    overflow-y: auto;
+    width: 100%;
+}

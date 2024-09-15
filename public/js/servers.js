@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const refreshButton = document.getElementById('refresh-servers');
     const editButton = document.getElementById('edit-servers');
     const saveButton = document.getElementById('save-servers');
-    const tableBody = document.querySelector('#server-table tbody');
+    const serverTable = document.getElementById('server-table');
+    const tableBody = serverTable ? serverTable.querySelector('tbody') : null;
     const noServersMessage = document.getElementById('no-servers-message');
     let isEditMode = false;
 
@@ -30,8 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
         'YT', 'ZA', 'ZM', 'ZW'
     ];
 
-    function createInputCell(value, type = 'text') {
-        return `<td><input type="${type}" value="${value}" /></td>`;
+    function createCountryDropdown(selectedCountry) {
+        const options = validCountries.map(country => {
+            const isSelected = country === selectedCountry ? 'selected' : '';
+            return `<option value="${country}" ${isSelected}>${country}</option>`;
+        }).join('');
+
+        return `<select class="country-dropdown">${options}</select>`;
+    }
+
+    function createInputCell(value, type = 'text', isCountry = false) {
+        if (isCountry) {
+            return `<td>${createCountryDropdown(value)}</td>`;
+        } else {
+            return `<td><input type="${type}" value="${value}" /></td>`;
+        }
     }
 
     function toggleEditMode() {
@@ -41,19 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
             if (isEditMode) {
-                // Convert cells to input fields
-                cells.forEach(cell => {
-                    // Auth Key is non editable (because of spoiler)
-                    if (cell.attributes.isauthkey) {
-                        return;
+                cells.forEach((cell, index) => {
+                    if (index === 0) {
+                        const text = cell.innerText || cell.textContent;
+                        cell.innerHTML = createInputCell(text, 'text', true);
+                    } else if (!cell.attributes.isauthkey) {
+                        const text = cell.innerText || cell.textContent;
+                        cell.innerHTML = createInputCell(text);
                     }
-                    const text = cell.innerText || cell.textContent;
-                    cell.innerHTML = createInputCell(text);
                 });
             } else {
-                // Convert input fields back to text
                 cells.forEach(cell => {
-                    const input = cell.querySelector('input');
+                    const input = cell.querySelector('input') || cell.querySelector('select');
                     if (input) {
                         cell.innerHTML = input.value;
                     }
@@ -67,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function saveServers() {
         const rows = tableBody.querySelectorAll('tr');
         const serverData = [];
+        let validData = true;
 
         rows.forEach(row => {
             const cells = row.querySelectorAll('td');
@@ -85,8 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 path: row.clusterPath
             };
 
+            if (!server.name || !server.port || !server.maxPlayers || !server.map || !server.country) {
+                alert("Blank data is not allowed, input data and try again.");
+                validData = false;
+                return;
+            }
+
             serverData.push(server);
         });
+
+        if (!validData) return;
 
         console.log('Sending serverData:', serverData);
 
@@ -102,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (data.success) {
                     alert('Servers updated successfully.');
                 } else {
-                    alert('Error updating servers.');
+                    alert(`Error updating servers: ${data.error || 'Unknown error'}`);
                 }
             })
             .catch(err => {
