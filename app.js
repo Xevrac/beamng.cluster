@@ -158,9 +158,9 @@ app.post('/api/save-servers', async (req, res) => {
                 // Update configData with new values
                 configData.General.Name = server.name;
                 configData.General.Port = server.port;
-                configData.General.AuthKey = server.authKey;
+                // configData.General.AuthKey = server.authKey; // Comment out for now
                 configData.General.MaxPlayers = server.maxPlayers;
-                configData.General.Map = `/levels/${server.map}`;
+                configData.General.Map = `/levels/${server.map}/info.json`;
                 configData.General.Country = server.country.trim();
 
                 const updatedConfig = smolToml.stringify(configData);
